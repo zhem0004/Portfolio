@@ -1,0 +1,344 @@
+<html>
+	<head>
+		<title>Bohdan Zhemelinskyi</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">Portfolio</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li><a href="index.html">Projects</a></li>
+							<li class="active"><a href="generic.html">About me</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<h1>Taxonomic classification database</h1>
+								</header>
+								<a  class="image fit"><img src="images/pic01.png" alt="" /></a>
+								
+								<p>DDL</p>
+								
+								<pre
+								class="image fit"
+								style="
+								font-size: small;
+								"
+								>
+CREATE TABLE Life( 
+Domain 	varchar (30) NOT NULL,
+
+CONSTRAINT Life_PK PRIMARY KEY( Domain )
+);
+
+
+CREATE TABLE Bacteria( 
+Name 	varchar (30) NOT NULL,
+Domain 	varchar (30) NOT NULL,
+Shape 	varchar (30),
+
+CONSTRAINT Bacteria_PK PRIMARY KEY( Name ),
+CONSTRAINT Bacteria_FK FOREIGN KEY( Domain ) REFERENCES Life( Domain)
+);
+
+
+CREATE TABLE Eukaryote( 
+Domain 		varchar (30) NOT NULL,
+Kingdom 	varchar (30) NOT NULL,
+Cell_wall_material varchar (30),
+Desctiption 	varchar (300),
+
+CONSTRAINT Eukaryote_PK PRIMARY KEY( Kingdom ),
+CONSTRAINT Eukaryote_FK FOREIGN KEY( Domain ) REFERENCES Life ( Domain )
+);
+
+
+CREATE TABLE Archaea(
+Name 	varchar (30) NOT NULL,
+Domain 	varchar (30) NOT NULL,
+
+CONSTRAINT Archaea_PK PRIMARY KEY( Name ),
+CONSTRAINT Archaea_FK FOREIGN KEY( Domain ) REFERENCES Life( Domain )
+);
+
+
+CREATE TABLE Plant_Family( 
+Family_name 	varchar (30) NOT NULL,
+Kingdom 	varchar (30) NOT NULL,
+ 
+CONSTRAINT Plant_Family_PK PRIMARY KEY( Family_name ),
+CONSTRAINT Plant_Family_FK FOREIGN KEY( Kingdom ) REFERENCES Eukaryote( Kingdom )
+);
+
+
+CREATE TABLE Animal_Family( 
+Family_name 	varchar (30) NOT NULL,
+Kingdom 	varchar (30) NOT NULL,
+
+CONSTRAINT Animal_Family_PK PRIMARY KEY( Family_name ),
+CONSTRAINT Animal_Family_FK FOREIGN KEY( Kingdom ) REFERENCES Eukaryote( Kingdom )
+);
+
+
+CREATE TABLE Fungus_Family(
+Family_name 	varchar (30) NOT NULL,
+Kingdom 	varchar (30) NOT NULL,
+
+CONSTRAINT Fungus_Family_PK PRIMARY KEY( Family_name ),
+CONSTRAINT Fngus_Family_FK FOREIGN KEY( Kingdom ) REFERENCES Eukaryote( Kingdom )
+
+);
+
+CREATE TABLE Plant( 
+Name 		varchar (30) NOT NULL,
+Family_name 	varchar (30) NOT NULL,
+Habitat 	varchar (30),
+Has_Seeds 	boolean,
+
+CONSTRAINT Plant_PK PRIMARY KEY( Name ),
+CONSTRAINT Plant_FK FOREIGN KEY( Family_name ) REFERENCES Plant_Family( Family_name )
+);
+
+
+CREATE TABLE Animal( 
+Name 		varchar (30) NOT NULL,
+Family_name 	varchar (30) NOT NULL,
+Vertebrate 	boolean,
+Habitat 	varchar (30),
+Size 		varchar (30),
+
+
+CONSTRAINT Animal_PK PRIMARY KEY( Name ),
+CONSTRAINT Animal_FK FOREIGN KEY( Family_name ) REFERENCES Animal_Family( Family_name )
+);
+
+
+CREATE TABLE Fungus(
+Name 		varchar (30) NOT NULL,
+Family_name 	varchar (30) NOT NULL,
+Habitat 	varchar (30),
+
+CONSTRAINT Fungus_PK PRIMARY KEY( Name ),
+CONSTRAINT Fungus_FK FOREIGN KEY( Family_name ) REFERENCES Fungus_Family( Family_name )
+
+);
+
+--View
+CREATE VIEW Cocci
+AS
+SELECT * FROM Bacteria WHERE Shape = 'cocci';
+
+</pre>
+
+<p>Sample DML</p>
+
+<pre
+								class="image fit"
+								style="
+								font-size: small;
+								"
+								>
+--Life
+INSERT INTO Life VALUES ( 'Bacteria');
+INSERT INTO Life VALUES ( 'Eukariote');
+INSERT INTO Life VALUES ( 'Archaea');
+INSERT INTO Life VALUES ( 'Artificial Intelligence');
+INSERT INTO Life VALUES ( 'Aliens');
+
+--Bacteria
+INSERT INTO Bacteria VALUES ( 'Staphylococcus aureus', 'Bacteria', 'cocci');
+INSERT INTO Bacteria VALUES ( 'Burkholderia cepacia', 'Bacteria', 'bacilli');
+INSERT INTO Bacteria VALUES ( 'Pseudomonas aeruginosa', 'Bacteria', 'bacilli');
+INSERT INTO Bacteria VALUES ( 'Clostridium difficile', 'Bacteria', 'spiral');
+INSERT INTO Bacteria VALUES ( 'Klebsiella pneumoniae', 'Bacteria', 'bacilli');
+INSERT INTO Bacteria VALUES ( 'Escherichia coli', 'Bacteria', 'bacilli');
+INSERT INTO Bacteria VALUES ( 'Acinetobacter baumannii', 'Bacteria', 'cocci');
+INSERT INTO Bacteria VALUES ( 'Mycobacterium tuberculosis', 'Bacteria', 'spiral');
+INSERT INTO Bacteria VALUES ( 'Neisseria gonorrhoeae', 'Bacteria', 'cocci');
+INSERT INTO Bacteria VALUES ( 'Streptococcus pyogenes', 'Bacteria', 'cocci');
+
+--Eukaryote
+INSERT INTO Eukaryote VALUES ( 'Eukariote', 'Plant', 'Cellulose', 'Have chlorophyll that makes them autotroph');
+INSERT INTO Eukaryote VALUES ( 'Eukariote', 'Animal', Null, 'Have Membrane instead of cell wall, are able to move');
+INSERT INTO Eukaryote VALUES ( 'Eukariote', 'Fungus', 'Chitin', 'They can switch between a yeast phase and a hyphal phase');
+INSERT INTO Eukaryote VALUES ( 'Eukariote', 'Glaucophytes', Null, 'Not officialy concidered to be a kingdom, but do not fit into either of them');
+INSERT INTO Eukaryote VALUES ( 'Eukariote', 'Haptophytes', 'Scales', 'Not officialy concidered to be a kingdom, but do not fit into either of them');
+INSERT INTO Eukaryote VALUES ( 'Eukariote', 'Cryptomonads', Null,  'Not officialy concidered to be a kingdom, but do not fit into either of them');
+
+--Archaea
+INSERT INTO Archaea VALUES ( 'Altiarchaeales', 'Archaea');
+INSERT INTO Archaea VALUES ( 'Aenigmarchaeota', 'Archaea');
+INSERT INTO Archaea VALUES ( 'Nanoarchaeota', 'Archaea');
+INSERT INTO Archaea VALUES ( 'Pavarchaeota', 'Archaea');
+INSERT INTO Archaea VALUES ( 'Thermococci', 'Archaea');
+INSERT INTO Archaea VALUES ( 'Crenarchaeota', 'Archaea');
+INSERT INTO Archaea VALUES ( 'Archaeoglobi', 'Archaea');
+INSERT INTO Archaea VALUES ( 'Geoarchaeota', 'Archaea');
+INSERT INTO Archaea VALUES ( 'Bathyarchaeota', 'Archaea');
+INSERT INTO Archaea VALUES ( 'Odinarchaeota', 'Archaea');
+
+--Plant_Family
+INSERT INTO Plant_Family VALUES ( 'Borage', 'Plant');
+INSERT INTO Plant_Family VALUES ( 'Pines', 'Plant');
+INSERT INTO Plant_Family VALUES ( 'Bangiaceae', 'Plant');
+INSERT INTO Plant_Family VALUES ( 'Wood ferns', 'Plant');
+INSERT INTO Plant_Family VALUES ( 'Grasses', 'Plant');
+
+--Animal_Family
+INSERT INTO Animal_Family VALUES ( 'Bears', 'Animal'); 
+INSERT INTO Animal_Family VALUES ( 'Great Apes', 'Animal');
+INSERT INTO Animal_Family VALUES ( 'Orbigny', 'Animal');
+INSERT INTO Animal_Family VALUES ( 'Cave spiders', 'Animal');
+INSERT INTO Animal_Family VALUES ( 'Rockfishes', 'Animal');
+
+--Fungus_Family
+INSERT INTO Fungus_Family VALUES ( 'Trichocomaceae', 'Fungus');
+INSERT INTO Fungus_Family VALUES ( 'Verrucariaceae', 'Fungus');
+INSERT INTO Fungus_Family VALUES ( 'Orbiliaceae', 'Fungus');
+INSERT INTO Fungus_Family VALUES ( 'Parmeliaceae', 'Fungus');
+INSERT INTO Fungus_Family VALUES ( 'Albuginaceae', 'Fungus');
+
+--Plant
+INSERT INTO Plant VALUES ( 'Mertensia alpina', 'Borage', 'North America', true);
+INSERT INTO Plant VALUES ( 'Alkanna tinctoria', 'Borage', 'Australia', true);
+INSERT INTO Plant VALUES ( 'Aleppo pine', 'Pines', 'North America', true);
+INSERT INTO Plant VALUES ( 'Swiss stone pine', 'Pines', 'Europe and Nortern Asia', true);
+INSERT INTO Plant VALUES ( 'Porphyra porphyra', 'Bangiaceae', 'East Asia and Europe', false);
+INSERT INTO Plant VALUES ( 'Conchocelis rosea Batters', 'Bangiaceae', 'North America and Europe', false);
+INSERT INTO Plant VALUES ( 'Alaska hollyfern', 'Wood ferns', 'North America', false);
+INSERT INTO Plant VALUES ( 'Climbing woodfern', 'Wood ferns', 'North America', false);
+INSERT INTO Plant VALUES ( 'Zea mays', 'Grasses', 'North America', true);
+INSERT INTO Plant VALUES ( 'Goosegrass', 'Grasses', 'North America', true);
+
+--Animal
+INSERT INTO Animal VALUES ( 'American Black Bear', 'Bears', true, 'North America', '41-250 kg');
+INSERT INTO Animal VALUES ( 'Asiatic black bear', 'Bears', true, 'Europe and Asia', '40-200 kg');
+INSERT INTO Animal VALUES ( 'Human', 'Great Apes', true, 'All continents', ' 171 cm');
+INSERT INTO Animal VALUES ( 'Gorilla', 'Great Apes', true, 'Africa', '200 kg');
+INSERT INTO Animal VALUES ( 'Longarm octopus', 'Orbigny', false, 'Atlantic ocean', '90 mm');
+INSERT INTO Animal VALUES ( 'California two-spot octopus', 'Orbigny', false, 'Atlantic ocean', '17.5 cm');
+INSERT INTO Animal VALUES ( 'Neoleptoneta alabama', 'Cave spiders', false, 'Northern America', '3 cm');
+INSERT INTO Animal VALUES ( 'Sulcia occulta Kratochvíl', 'Cave spiders', false, 'Northern America, Europe', '1 cm');
+INSERT INTO Animal VALUES ( 'Acadian redfish', 'Rockfishes', true, 'Western Atlantic ocean', '508 mm');
+INSERT INTO Animal VALUES ( 'Inimicus sinensis', 'Rockfishes', true, 'Arafura Sea, Indian ocean', '26 cm');
+
+
+--Fungus
+INSERT INTO Fungus VALUES ( 'Eupenicillium crustaceum', 'Trichocomaceae', 'Europe');
+INSERT INTO Fungus VALUES ( 'Eurotium Link', 'Trichocomaceae', 'All continents');
+INSERT INTO Fungus VALUES ( 'Thelidium areolatum', 'Verrucariaceae', 'North America');
+INSERT INTO Fungus VALUES ( 'Pharcidia balani', 'Verrucariaceae', 'Indian Sea');
+INSERT INTO Fungus VALUES ( 'Orbilia marina', 'Orbiliaceae', 'Indian Sea');
+INSERT INTO Fungus VALUES ( 'Orbiliaster pilosa', 'Orbiliaceae', 'Europe');
+INSERT INTO Fungus VALUES ( 'Protoparmelia badia', 'Parmeliaceae', 'All continents');
+INSERT INTO Fungus VALUES ( 'Dactylina ramulosa', 'Parmeliaceae', 'North America');
+INSERT INTO Fungus VALUES ( 'Albugo cruciferarum', 'Albuginaceae', 'All continents');
+INSERT INTO Fungus VALUES ( 'Albugo candida', 'Albuginaceae', 'All continents');
+
+</pre>
+
+<p>Sample queries</p>
+
+<pre
+								class="image fit"
+								style="
+								font-size: small;
+								"
+								>
+--SELECT statements with WHERE 
+SELECT * FROM Animal WHERE Family_name = 'Bears';
+SELECT * FROM Plant WHERE Family_name = 'Grasses';
+SELECT * FROM Fungus WHERE Family_name <> 'Albuginaceae';
+SELECT * FROM Bacteria WHERE Shape = 'cocci' or Shape = 'bacilli';
+
+---Query that displays All Eukaryote information with Joins and Subqueries
+SELECT * FROM Eukaryote e
+FULL OUTER JOIN (SELECT f.kingdom, f.Family_name, name, habitat, vertebrate, size FROM Animal a LEFT OUTER JOIN Animal_Family f
+on a.Family_name =  f.Family_name) f1 on f1.kingdom = e.kingdom
+FULL OUTER JOIN (SELECT f.kingdom, f.Family_name, name, habitat FROM Fungus_Family f LEFT JOIN Fungus fu
+on fu.Family_name =  f.Family_name) f2 on f2.kingdom = e.kingdom
+FULL OUTER JOIN (SELECT f.kingdom, f.Family_name, name, habitat, has_seeds FROM Plant_Family f RIGHT OUTER JOIN Plant p
+on p.Family_name =  f.Family_name) f3 on f3.kingdom = e.kingdom;
+
+--UNION query
+SELECT * FROM Archaea
+UNION
+SELECT name, domain FROM Bacteria
+Order by name;
+
+--View
+SELECT * FROM Cocci;
+
+--Metadata
+SELECT column_name, data_type, character_maximum_length 
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE
+TABLE_NAME = 'life' OR
+TABLE_NAME = 'bacteria' OR
+TABLE_NAME = 'eukaryote' OR
+TABLE_NAME = 'archaea' OR
+TABLE_NAME = 'animal' OR
+TABLE_NAME = 'plant' OR
+TABLE_NAME = 'fungus' OR
+TABLE_NAME = 'animal_family' OR
+TABLE_NAME = 'plant_family' OR
+TABLE_NAME = 'fungus_family';
+</pre>
+
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section class="split contact">
+							<section class="alt">
+								<h3>City</h3>
+								<p>Ottawa, ON</p>
+							</section>
+							<section>
+								<h3>Phone</h3>
+								<p>+1 613 608 2154</p>
+							</section>
+							<section>
+								<h3>Email</h3>
+								<p>zhem0004@algonquinlive.com</p>
+							</section>
+						</section>
+					</footer>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
